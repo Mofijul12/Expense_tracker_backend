@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600&family=IBM+Plex+Mono:wght@400&display=swap');
+
+/* Landing page + auth screens. The app shell (app.css) locks scrolling to the
+   inner pane; these pages scroll the document instead.
+
+   The landing page carries the reference design's own palette and type, which
+   is deliberately not Nocturne's — everything here is scoped under `.lp`. */
+
+.lp, .auth { min-height: 100%; }
+body:has(.lp), body:has(.auth) { overflow: auto; }
+html:has(.lp) { scroll-behavior: smooth; }
+body:has(.lp) { background: #0a0b14; }
+
+.lp {
+  --ink: #0a0b14;
+  --indigo: #6c7cff;
+  --coral: #ff7a59;
+  --lp-text: #edeff5;
+  --lp-muted: #8b92ac;
+
+  background: var(--ink);
+  color: var(--lp-text);
+  font-family: 'Inter', sans-serif;
+}
+
+.lp-canvas { position: fixed; inset: 0; z-index: 1; }
+.lp-canvas canvas { display: block; }
+
+.lp-story { position: relative; z-index: 2; }
+
+.lp-chapter {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 8vw;
+  pointer-events: none;
+}
+.lp-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--indigo);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.lp-chapter h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: clamp(32px, 5.5vw, 68px);
+  line-height: 1.04;
+  max-width: 760px;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--lp-text);
+}
+.lp-chapter h2 em { font-style: normal; color: var(--coral); }
+.lp-chapter p {
+  font-size: clamp(14px, 1.4vw, 17px);
+  color: var(--lp-muted);
+  max-width: 440px;
+  margin: 20px 0 0;
+  line-height: 1.6;
+}
+.lp-chapter-content {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.lp-chapter.in-view .lp-chapter-content { opacity: 1; transform: translateY(0); }
+
+.last-chapter .lp-cta-row { display: flex; gap: 16px; margin-top: 36px; pointer-events: auto; }
+.lp-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600; font-size: 15px;
+  padding: 15px 30px; border-radius: 10px;
+  cursor: pointer; border: none; text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+              border-color 0.25s ease, color 0.25s ease;
+}
+.lp-btn-primary { background: var(--indigo); color: #0a0b14; }
+.lp-btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(108, 124, 255, 0.4); }
+.lp-btn-ghost { background: transparent; color: var(--lp-text); border: 1px solid rgba(255, 255, 255, 0.18); }
+.lp-btn-ghost:hover { border-color: var(--coral); color: var(--coral); }
+
+.lp-stat-strip {
+  display: flex; gap: 40px; margin-top: 44px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.lp-stat-strip div { color: var(--lp-muted); font-size: 12px; }
+.lp-stat-strip strong {
+  display: block; color: var(--lp-text); font-size: 20px;
+  font-family: 'Space Grotesk', sans-serif; margin-bottom: 4px;
+}
+
+.lp-rail {
+  position: fixed; right: 5vw; top: 50%; transform: translateY(-50%);
+  z-index: 3; display: flex; flex-direction: column; gap: 22px;
+}
+.lp-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  transition: all 0.35s ease; position: relative;
+}
+.lp-dot span {
+  position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--lp-muted);
+  white-space: nowrap; opacity: 0; transition: opacity 0.3s ease;
+}
+.lp-dot.active {
+  background: var(--indigo);
+  box-shadow: 0 0 12px rgba(108, 124, 255, 0.6);
+  transform: scale(1.4);
+}
+.lp-dot.active span { opacity: 1; color: var(--indigo); }
+
+@media (max-width: 720px) { .lp-rail { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .lp-chapter-content { transition: none; }
+}
+
+/* ══ auth screens ═══════════════════════════════════════════════════ */
+.auth { display: grid; grid-template-columns: 1fr 0.85fr; min-height: 100vh; }
+.auth-panel {
+  display: flex; flex-direction: column; gap: var(--space-8);
+  padding: var(--space-8) clamp(var(--space-8), 7vw, 80px);
+}
+.auth-brand {
+  display: flex; align-items: center; gap: var(--space-3);
+  font-size: 16px; font-weight: 500; color: var(--color-text); text-decoration: none;
+}
+.auth-form-wrap { margin: auto 0; width: 100%; max-width: 380px; }
+.auth-title { font-size: 30px; letter-spacing: -0.025em; margin: 0 0 var(--space-2); font-weight: 500; }
+.auth-subtitle { font-size: 14px; color: var(--color-neutral-400); margin: 0 0 var(--space-8); }
+.auth-form { display: flex; flex-direction: column; gap: var(--space-4); }
+.auth-hint { font-size: 11.5px; color: var(--color-neutral-600); margin-top: var(--space-1); }
+.auth-footer {
+  margin-top: var(--space-6); font-size: 13.5px; color: var(--color-neutral-400);
+}
+
+.auth-aside {
+  position: relative; overflow: hidden; display: grid; place-items: center;
+  padding: var(--space-8);
+  background: linear-gradient(150deg, var(--color-accent-900), #1a1c2b 62%);
+  box-shadow: inset 1px 0 0 rgba(233,233,237,.07);
+}
+.auth-aside-inner { max-width: 380px; display: flex; flex-direction: column; gap: var(--space-8); }
+.auth-quote {
+  font-size: 21px; line-height: 1.45; letter-spacing: -0.015em; color: var(--color-accent-100);
+}
+.auth-highlights { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-4); }
+.auth-highlights li {
+  display: flex; align-items: flex-start; gap: var(--space-3);
+  font-size: 13.5px; color: var(--color-neutral-300);
+}
+.auth-highlights i { font-size: 17px; color: var(--color-accent); }
+
+@media (max-width: 860px) {
+  .auth { grid-template-columns: 1fr; }
+  .auth-aside { display: none; }
+}
